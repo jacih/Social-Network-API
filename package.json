@@ -1,7 +1,7 @@
 {
     "name": "social-network-api",
     "version": "1.0.0",
-    "description": "",
+    "description": "Mongoose back-end s-n-a-app",
     "main": "index.js",
     "license": "",
     "scripts": {
