@@ -14,7 +14,8 @@
 - [Questions](#questions)
 
 ## [Description](#table-of-contents)
-.placeholder text.
+The Social Network API is a back-end build for a social network web application where users can share their thoughts, react to other user’s thoughts, and create and manage a friend’s list.
+The back-end build uses express.js for handling data routing and MongoDB and Mongoose ODM for database management. The benefit of this type of database structure is that it can handle large amounts of unstructured data, as opposed to an SQL database.  Insomnia was used to seed the database and test routes. The videos linked in mock-up contain walkthroughs of the repository folder structure, as well as route tests in Insomnia. 
 
 ## [Mock-Up](#table-of-contents)
 
