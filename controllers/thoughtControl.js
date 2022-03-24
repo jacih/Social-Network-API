@@ -31,7 +31,7 @@ module.exports = {
         !thought
         ? res.status(404).json({ message: 'No thought created.' })
         : User.findOneAndUpdate(
-          { _id: req.params.userId },
+          { _id: req.body.userId },
           { $addToSet: { thoughts: thought._id } },
           { new: true }
         ).select('-__v')
