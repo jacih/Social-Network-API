@@ -32,14 +32,18 @@ module.exports = {
         ? res.status(404).json({ message: 'No thought created.' })
         : User.findOneAndUpdate(
           { _id: req.params.userId },
-          { $set: { thoughts: thought._id } },
-          { runValidators: true, new: true }
+          { $addToSet: { thoughts: thought._id } },
+          { new: true }
         ).select('-__v')
-        .then((thought) =>
-          !thought
+        .then((user) =>
+          !user
           ? res.status(404).json({ message: 'Thought created, but no such user exists.' })
           : res.status(200).json({ message: 'Thought created and added to user.' })
         )
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).json(err);  
+        })
       )
       .catch((err) => {
         console.log(err);

@@ -15,7 +15,7 @@ router.route('/').get(getThoughts).post(createThought);
 // /api/thoughts/:thoughtId
 router.route('/:thoughtId').get(getSingleThought).put(updateThought).delete(removeThought);
 
-// /api/thoughts/:thoughtId/reaction
+// /api/thoughts/:thoughtId/
 router.route('/:thoughtId').post(addReaction);
 
 // /api/thoughts/:thoughtId/reaction/:reactionId
