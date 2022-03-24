@@ -5,14 +5,15 @@
     "main": "index.js",
     "license": "",
     "scripts": {
-      "start": "node index",
-      "dev": "nodemon index",
-      "seed": "node utils/seed",
+      "start": "node server",
+      "dev": "nodemon server",
+      "seed": "node utils/seed.js",
       "heroku-postbuild": "node utils/seed.js"
     },
     "dependencies": {
       "express": "^4.17.1",
-      "mongoose": "^6.0.13"
+      "mongoose": "^6.0.13",
+      "dayjs": "^1.11.0"
     },
     "devDependencies": {
       "nodemon": "^2.0.9"

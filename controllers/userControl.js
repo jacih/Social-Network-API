@@ -4,6 +4,7 @@ module.exports = {
   // Get all users
   getUsers(req, res) {
     User.find()
+      .select('-__v')
       .then((users) => res.json(users))
       .catch((err) => {
         console.log(err);
@@ -27,8 +28,11 @@ module.exports = {
   // create a new user
   createUser(req, res) {
     User.create(req.body)
-      .then((user) => res.json(user))
-      .catch((err) => res.status(500).json(err));
+      .then((user) => res.status(200).json(user))
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json(err);
+      });
   },
   // update user
   updateUser(req, res) {
@@ -40,7 +44,7 @@ module.exports = {
       .then((user) =>
       !user
         ? res.status(404).json({ message: 'No such user exists.' })
-        : res.json(user)
+        : res.status(200).json(user)
       )
       .catch((err) => {
         console.log(err);
@@ -55,7 +59,7 @@ module.exports = {
           ? res.status(404).json({ message: 'No such user exists.' })
           : Thought.deleteMany({ _id: { $in: user.thoughts } })
       )
-      .then(() => res.json({ message: 'User, and their thoughts, deleted from database.'}))
+      .then(() => res.status(200).json({ message: 'User, and their thoughts, deleted from database.'}))
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);
@@ -72,7 +76,7 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: 'No such friend exists.' })
-          : res.json(user))
+          : res.json({ user, message: 'Friend added successfully'}))
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);
@@ -88,7 +92,7 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: 'No such friend exists' })
-          : res.json({ message: 'Friend removed from user\'s friend list.' }))
+          : res.status(200).json({ message: 'Friend removed from user\'s friend list.' }))
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);

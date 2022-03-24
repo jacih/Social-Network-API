@@ -1,10 +1,10 @@
 const { User, Thought } = require('../models');
 
 module.exports = {
-  // Get all courses
+  // Get all thoughts
   getThoughts(req, res) {
     Thought.find()
-      .then((thoughts) => res.json(thoughts))
+      .then((thoughts) => res.status(200).json(thoughts))
       .catch((err) => {
         console.log(err);
         return res.status(500).json(err);
@@ -17,27 +17,29 @@ module.exports = {
       .then((thought) =>
         !thought
         ? res.status(404).json({ message: 'No thought found with such id.' })
-        : res.json(thought)
+        : res.status(200).json(thought)
       )
       .catch((err) => {
         console.log(err);
         return res.status(500).json(err);
       });
   },
-  // Create a thought
+  // Create a thought - may need to tweak this after seeding
   createThought(req, res) {
     Thought.create(req.body)
-      .then((thought) => {
-        return User.findOneAndUpdate(
+      .then((thought) => 
+        !thought
+        ? res.status(404).json({ message: 'No thought created.' })
+        : User.findOneAndUpdate(
           { _id: req.params.userId },
-          { $set: req.body },
+          { $set: { thoughts: thought._id } },
           { runValidators: true, new: true }
+        ).select('-__v')
+        .then((thought) =>
+          !thought
+          ? res.status(404).json({ message: 'Thought created, but no such user exists.' })
+          : res.status(200).json({ message: 'Thought created and added to user.' })
         )
-      })
-      .then((user) =>
-        !user
-        ? res.status(404).json({ message: 'Thought created, but no such user exists.' })
-        : res.json({ message: 'Thought created and added to user. '})
       )
       .catch((err) => {
         console.log(err);
@@ -54,7 +56,7 @@ module.exports = {
       .then((thought) =>
         !thought
         ? res.status(404).json({ message: 'No thought found with such id' })
-        : res.json(thought)
+        : res.status(200).json(thought)
       )
       .catch((err) => {
         console.log(err);
@@ -73,7 +75,10 @@ module.exports = {
           { runValidators: true, new: true }
         )
       )
-      .then(() => res.json({ message: 'Thought removed from user.' }))
+      .then((user) => 
+        !user
+        ? res.status(404).json({ message: 'No such user associated with that thought.' })
+        : res.status(200).json({ message: 'Thought removed from user.' }))
       .catch((err) => {
         console.log(err);
         return res.status(500).json(err);
@@ -86,10 +91,10 @@ module.exports = {
       { $addToSet: { reactions: req.body } },
       { runValidators: true, new: true }
     )
-      .then((user) =>
-        !user
+      .then((thought) =>
+        !thought
         ? res.status(404).json({ message: 'No thought found with such id.' })
-        : res.json({ message: 'Reaction added to thought.' })
+        : res.status(200).json({ message: 'Reaction added to thought.' })
       )
       .catch((err) => {
         console.log(err);
@@ -106,7 +111,7 @@ module.exports = {
       .then((thought) =>
         !thought
         ? res.status(404).json({ message: 'No thought found with such id.' })
-        : res.json({ message: 'Reaction deleted from thought.' })
+        : res.status(200).json({ message: 'Reaction deleted from thought.' })
       )
       .catch((err) => {
         console.log(err);
